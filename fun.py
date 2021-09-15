@@ -32,7 +32,6 @@ def game_space():
 
 # create the snake on top of the game space
 def gen_snake():
-    print("hhhhh")
     screen[round(height/2)][round(width/2)] = '\033[0;32;42m ' # highlight the character at 9,29W in the screen array
     screen[round(height/2)][round(width/2)+1] = '\033[0;37;40m ' # make sure the lines after it are not highlighted
 
