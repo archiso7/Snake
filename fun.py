@@ -37,17 +37,17 @@ def Update():
 def move_snake(dir):
     global screen
     inc = 1
-    index = 0
-    rindex = 1
+    index = 1
+    rindex = 0
     screen[snake_position[1][0]][snake_position[1][1]] = screen[snake_position[1][0]][snake_position[1][1]].replace('\033[0;32;42m', '')
     snake_position.pop(-1)
-    if dir in [6, 8]:
+    if dir in [4, 8]:
         inc = -1
-    if dir in [4, 6]:
-        index = 1
-        rindex = 0
+    if dir in [2, 8]:
+        index = 0
+        rindex = 1
     snake_position.insert(0, [snake_position[0][index]+inc])
-    snake_position[0].insert(rindex, snake_position[1][rindex])
+    snake_position[0].insert(rindex, snake_position[-1][rindex])
     gen_snake()
 
 # generate the box for the game to be played in
@@ -89,4 +89,16 @@ def display():
 
 # what to do when a key is pressed
 def on_press(key):
-    exit()
+    global snake_rotation
+    try:
+        if key.char in ['w', 'a', 's', 'd', 'Key.up', 'Key.left', 'Key.down', 'Key.right']:
+            if key.char in ['w', 'Key.up']:
+                snake_rotation = 8
+            elif key.char in ['a', 'Key.left']:
+                snake_rotation = 4
+            elif key.char in ['s', 'Key.down']:
+                snake_rotation = 2
+            elif key.char in ['d', 'Key.right']:
+                snake_rotation = 6
+    except:
+        pass
