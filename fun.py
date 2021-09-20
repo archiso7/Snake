@@ -39,8 +39,6 @@ def gen_snake(screen):
     screen[round(height/2)][round(width/2)+1] = '\033[0;37;40m ' # make sure the lines after it are not highlighted
     return(screen)
 
-
-
 # print everything
 def display(screen):
     ts = ''
@@ -49,6 +47,7 @@ def display(screen):
             ts += n
         ts += '\n'
     print(ts)
+
 # what to do when a key is pressed
 def on_press(key):
     exit()
