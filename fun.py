@@ -1,8 +1,20 @@
 # python imports
 from pynput import keyboard
+import time
+import sys
 
 # file imports
 from vars import *
+
+global snake_rotation
+global snake_position
+global snake_len
+global screen
+
+snake_rotation = 8
+snake_position = [[round(height/2), round(width/2)], [round(height/2)+1, round(width/2)]]
+snake_len = 2
+screen = []
 
 # check for keypresses
 def background():
@@ -13,9 +25,34 @@ def background():
 # the forground thread
 def foreground():
     game_space()
+    while True:
+        time.sleep(0.5)
+        Update()
+
+def Update():
+    move_snake(snake_rotation)
+
+    display()
+
+def move_snake(dir):
+    global screen
+    inc = 1
+    index = 0
+    rindex = 1
+    screen[snake_position[1][0]][snake_position[1][1]] = screen[snake_position[1][0]][snake_position[1][1]].replace('\033[0;32;42m', '')
+    snake_position.pop(-1)
+    if dir in [6, 8]:
+        inc = -1
+    if dir in [4, 6]:
+        index = 1
+        rindex = 0
+    snake_position.insert(0, [snake_position[0][index]+inc])
+    snake_position[0].insert(rindex, snake_position[1][rindex])
+    gen_snake()
 
 # generate the box for the game to be played in
 def game_space():
+    global screen
     screen = [[' ' for i in range(width-2)] for i in range(height-2)]
     top_line = ['\u2500' for i in range(width-2)]
     bottom_line = ['\u2500' for i in range(width-2)]
@@ -30,23 +67,25 @@ def game_space():
         i.append('\u2502')
     screen.insert(0, top_line) # add the top line to the start of screen
     screen.append(bottom_line) # add the bottom line to the screen
-    display(gen_snake(screen))
+    gen_snake()
+    display()
 
 # create the snake on top of the game space
-def gen_snake(screen):
-    print(screen)
-    screen[round(height/2)][round(width/2)] = '\033[0;32;42m ' # highlight the character at 9,29W in the screen array
-    screen[round(height/2)][round(width/2)+1] = '\033[0;37;40m ' # make sure the lines after it are not highlighted
-    return(screen)
+def gen_snake():
+    global screen
+    for i in range(len(snake_position)):
+        screen[snake_position[i][0]][snake_position[i][1]] = '\033[0;32;42m' + screen[snake_position[i][0]][snake_position[i][1]] # highlight the character in the screen array
+        screen[snake_position[i][0]][snake_position[i][1]+1] = '\033[0;37;40m' + screen[snake_position[i][0]][snake_position[i][1]+1] # make sure the lines after it are not highlighted
 
 # print everything
-def display(screen):
+def display():
+    global screen
     ts = ''
     for i in screen:
         for n in i:
             ts += n
         ts += '\n'
-    print(ts)
+    print('\033[2J' + '\033[0;0H' + ts)
 
 # what to do when a key is pressed
 def on_press(key):
