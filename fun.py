@@ -74,8 +74,8 @@ def game_space():
 def gen_snake():
     global screen
     for i in range(len(snake_position)):
-        screen[snake_position[i][0]][snake_position[i][1]] = '\033[0;32;42m' + screen[snake_position[i][0]][snake_position[i][1]] # highlight the character in the screen array
-        screen[snake_position[i][0]][snake_position[i][1]+1] = '\033[0;37;40m' + screen[snake_position[i][0]][snake_position[i][1]+1] # make sure the lines after it are not highlighted
+        screen[snake_position[i][0]][snake_position[i][1]] = '\033[0;32;42m' + screen[snake_position[i][0]][snake_position[i][1]].replace('\033[0;37;40m', '') # highlight the character in the screen array
+        screen[snake_position[i][0]][snake_position[i][1]+1] = '\033[0;37;40m' + screen[snake_position[i][0]][snake_position[i][1]+1].replace('\033[0;37;40m', '') # make sure the lines after it are not highlighted
 
 # print everything
 def display():
@@ -92,13 +92,13 @@ def on_press(key):
     global snake_rotation
     try:
         if key.char in ['w', 'a', 's', 'd', 'Key.up', 'Key.left', 'Key.down', 'Key.right']:
-            if key.char in ['w', 'Key.up']:
+            if key.char in ['w', 'up']:
                 snake_rotation = 8
-            elif key.char in ['a', 'Key.left']:
+            elif key.char in ['a', 'left']:
                 snake_rotation = 4
-            elif key.char in ['s', 'Key.down']:
+            elif key.char in ['s', 'down']:
                 snake_rotation = 2
-            elif key.char in ['d', 'Key.right']:
+            elif key.char in ['d', 'right']:
                 snake_rotation = 6
     except:
         pass
